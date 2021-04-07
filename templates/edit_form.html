@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Add User {{ user.get_full_name() }} {% endblock %}
+
+{% block content %}
+
+<h1>Edit User:</h1>
+
+<form method="POST">
+    <div class="mb-3">
+      <label for="first_name" class="form-label">First name:</label>
+      <input type="text" class="form-control" name="first_name" value={{user.first_name}}>
+    </div>
+    <div class="mb-3">
+        <label for="last_name" class="form-label">Last name:</label>
+        <input type="text" class="form-control" name="last_name" value={{user.last_name}}>
+      </div>
+      <div class="mb-3">
+        <label for="img_url" class="form-label">Image URL:</label>
+        <input type="text" class="form-control" name="img_url" value={{user.img_url}}>
+      </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-secondary" href="/users/{{user.id}}">Cancel</button>
+
+  </form>
+
+{% endblock %}
