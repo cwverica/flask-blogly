@@ -27,7 +27,7 @@ class User(db.Model):
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
 
-class Post(db):
+class Post(db.Model):
     '''Post model'''
 
     __tablename__ = "posts"
