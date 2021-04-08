@@ -1,7 +1,7 @@
-from models import User, db
+from models import User, Post, db
 from app import app
 
-createdb()
+
 # Create all tables
 db.drop_all()
 db.create_all()

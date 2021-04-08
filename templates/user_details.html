@@ -17,11 +17,11 @@
       <h3>Posts:</h3>
       <ul>
         {% for post in user.posts %}
-        <li><a href="{{post.id}}">{{post.title}}</a></li>
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
         {% endfor %}
       </ul>
     {% endif %}
-    <a class="btn btn-success" href="users/{{user.id}}/posts/new">Add Post</a>
+    <a class="btn btn-success" href="/users/{{user.id}}/posts/new">Add Post</a>
     </div>
     </div>
 
