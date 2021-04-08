@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit {{post.user.get_full_name()}}'s post {% endblock %}
+
+{% block content %}
+<h1>Edit post:</h1>
+
+<form method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input type="text" class="form-control" name="title" value="{{post.title}}">
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Content:</label>
+        <input type="text" class="form-control" name="content" value="{{post.content}}">
+      </div>
+    <a href="/posts/{{post.id}}" class="btn btn-outline-info">Cancel</a>
+    <button type="submit" class="btn btn-success">Add</button>
+  </form>
+
+{% endblock %}

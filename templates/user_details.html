@@ -5,13 +5,24 @@
 {% block content %}
 
 <div class="card w-50">
-    <img width="200px" src="{{user.img_url}}" class=card-img-left alt="Picture of the user">
+    <img width="200px" src="{{user.img_url}}" class=card-img-top alt="Picture of the user">
     <div class="card-body">
-      <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
+      <h5 class="card-title">{{user.get_full_name() }}</h5>
       <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
       <form action="/users/{{user.id}}/delete" method="post">
       <button type="submit" class="btn btn-danger">Delete</button>
     </form>
+    <div> 
+    {% if users.posts %}
+      <h3>Posts:</h3>
+      <ul>
+        {% for post in users.posts %}
+        <li><a href="{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <a class="btn btn-success" href="users/{{user.id}}/posts/new">Add Post</a>
+    </div>
     </div>
 
 {% endblock %}
