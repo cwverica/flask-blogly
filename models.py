@@ -23,6 +23,7 @@ class User(db.Model):
     last_name = db.Column(db.String(30), nullable=False)
     img_url = db.Column(db.String(500), nullable=False, unique=True)
 
+    posts = db.relationship('Post', cascade='all,delete-orphan', backref='user')
     
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
@@ -38,7 +39,8 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = db.relationship('User', cascade="all", backref='posts')
+    tags = db.relationship('Tag', secondary='post_tags', backref='posts')
+    post_tags = db.relationship('PostTag', cascade='all,delete-orphan', backref='posts')
 
 class Tag(db.Model):
     '''Tag Model'''
@@ -48,15 +50,12 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, unique=True, nullable=False)
 
-    posts = db.relationship('Post', secondary='PostTag', backref='tags')
+    post_tags = db.relationship('PostTag', cascade='all,delete-orphan', backref='tags')
 
 class PostTag(db.Model):
     '''Post to Tag relation model'''
 
     __tablename__ = 'post_tags'
 
-    post_id = db.Column(db.ForeignKey('posts.id', ondelete="CASCADE"), primary_key=True)
-    tag_id = db.Column(db.ForeignKey('tags.id', ondelete="CASCADE"), primary_key=True)
-
-    posts = db.relationship('Post', backref='post_tags')
-    tags = db.relationship('Tag', backref='post_tags')
+    post_id = db.Column(db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.ForeignKey('tags.id'), primary_key=True)

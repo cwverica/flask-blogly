@@ -104,6 +104,9 @@ def show_post_details(post_id):
     '''shows the details of the individual post'''
 
     post = Post.query.filter(Post.id == post_id).one()
+
+    # import pdb
+    # pdb.set_trace()
     return render_template('post_details.html', post=post)
 
 
@@ -128,7 +131,7 @@ def submit_new_post_form(user_id):
     db.session.commit()
 
     for tag in Tag.query.all():
-        if request.form[tag.id]:
+        if str(tag.id) in request.form.keys():
             post_tag = PostTag(post_id=post.id, tag_id=tag.id)
             db.session.add(post_tag)
     db.session.commit()
@@ -156,12 +159,13 @@ def submit_edit_post_form(post_id):
     post.content = request.form['content']
 
     for tag in Tag.query.all():
-        if request.form[tag.id]:
-            if not PostTag.query.filter((PostTag.post_id == post.id) & (PostTag.tag_id == tag.id)).one_or_none():
+        pt_exists = PostTag.query.filter((PostTag.post_id == post.id) & (PostTag.tag_id == tag.id)).one_or_none()
+        if str(tag.id) in request.form:
+            if not pt_exists:
                 post_tag = PostTag(post_id=post.id, tag_id=tag.id)
                 db.session.add(post_tag)
         else:
-            if PostTag.query.filter((PostTag.post_id == post.id) & (PostTag.tag_id == tag.id)).one_or_none():
+            if pt_exists:
                 PostTag.query.filter((PostTag.post_id == post.id) & (PostTag.tag_id == tag.id)).delete()
             
     
@@ -174,6 +178,7 @@ def submit_edit_post_form(post_id):
 def delete_post(post_id):
     '''deletes specified post'''
 
+    PostTag.query.filter(PostTag.post_id == post_id).delete()
     Post.query.filter(Post.id==post_id).delete()
     db.session.commit()
 
@@ -258,6 +263,7 @@ def submit_edit_tag_form(tag_id):
 def delete_tag(tag_id):
     '''deletes selected tag'''
 
+    PostTag.query.filter(PostTag.tag_id==tag_id).delete()
     Tag.query.filter(Tag.id == tag_id).delete()
 
     db.session.commit()

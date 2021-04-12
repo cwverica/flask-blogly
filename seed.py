@@ -4,7 +4,6 @@ from app import app
 connect_db(app)
 
 # Create all tables
-PostTag.__table__.drop() #TODO: Figure out how to drop PostTag table first
 db.drop_all()
 db.create_all()
 
