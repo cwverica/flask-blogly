@@ -1,14 +1,19 @@
-from models import User, Post, db
+from models import *
 from app import app
 
+connect_db(app)
 
 # Create all tables
+PostTag.__table__.drop() #TODO: Figure out how to drop PostTag table first
 db.drop_all()
 db.create_all()
 
 # If table isn't empty, empty it
 User.query.delete()
+PostTag.query.delete()
 Post.query.delete()
+Tag.query.delete()
+
 
 # Add users
 john = User(first_name="John", last_name="Smith", img_url="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80")
@@ -32,4 +37,20 @@ jinglep2 = Post(title="Rocking out", content="As a geologist, I like rocks. I co
 jinglep3 = Post(title="I grow weary", content="Weary is the name of my favorite ficus. I also grow orchids, tomatos, mint, peppers, and violets", user_id=3)
 
 db.session.add_all([johnp1, johnp2, jacobp1, jinglep1, jinglep2, jinglep3])
+db.session.commit()
+
+# Do the same with tags!
+tag1 = Tag(name="Fun!")
+tag2 = Tag(name="Interesting...")
+tag3 = Tag(name="Shocking")
+
+db.session.add_all([tag1, tag2, tag3])
+db.session.commit()
+
+# And a couple PostTags!
+pt1 = PostTag(post_id=2, tag_id=2)
+pt2 = PostTag(post_id=3, tag_id=3)
+pt3 = PostTag(post_id=6, tag_id=1)
+
+db.session.add_all([pt1, pt2, pt3])
 db.session.commit()
